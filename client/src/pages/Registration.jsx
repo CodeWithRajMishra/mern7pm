@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-const Insert=()=>{
+const Registration=()=>{
     const [input, setInput] = useState({});
    const handleInput=(e)=>{
       let name=e.target.name;
@@ -8,7 +8,7 @@ const Insert=()=>{
       setInput(values=>({...values, [name]:value}));
    }
    const handleSubmit=async()=>{
-      let api="http://localhost:8000/employees/save";
+      let api="http://localhost:8000/employees/registration";
       const response = await axios.post(api, input);
       console.log(response);
       alert(response.data);
@@ -16,16 +16,15 @@ const Insert=()=>{
     return(
         <>
           <h1> Insert Data</h1>
-          Enter Empno : <input type="text" name="empno" onChange={handleInput} />
+          Enter User name : <input type="text" name="username" onChange={handleInput} />
           <br/>
-            Enter Name : <input type="text" name="name" onChange={handleInput} />
+            Enter Email : <input type="text" name="email" onChange={handleInput} />
           <br/>
-            Enter Designation : <input type="text" name="designation" onChange={handleInput} />
+            Enter Password : <input type="text" name="password" onChange={handleInput} />
           <br/>
-            Enter Salary : <input type="text" name="salary" onChange={handleInput} />
-          <br/>
+          
           <button onClick={handleSubmit}>Save!!!</button>
         </>
      )
 }
-export default Insert;
+export default Registration;

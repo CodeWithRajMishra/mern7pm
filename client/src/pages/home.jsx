@@ -1,9 +1,21 @@
-
+import { useState, useEffect } from "react";
 
 const Home=()=>{
+
+
+   const validateAuth=async()=>{
+  
+   }
+
+   useEffect(()=>{
+    validateAuth();
+   }, [])
+ 
     return(
         <>
-          <h1> Welcome To Home Page</h1>
+          <h1> Welcome To  JWT Login</h1>
+        
+
         </>
     )
 }
