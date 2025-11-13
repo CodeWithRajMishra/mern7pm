@@ -1,7 +1,9 @@
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 const Login=()=>{
     const [input, setInput] = useState({});
+    const navigate = useNavigate();
    const handleInput=(e)=>{
       let name=e.target.name;
       let value=e.target.value;
@@ -10,9 +12,12 @@ const Login=()=>{
    const handleSubmit=async()=>{
       let api="http://localhost:8000/employees/login";
       const response = await axios.post(api, input);
+
       console.log(response);
       localStorage.setItem("token", response.data.token);
       alert(response.data.msg);
+      navigate("/home")
+
    }
     return(
         <>

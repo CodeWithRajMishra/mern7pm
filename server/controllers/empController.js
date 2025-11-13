@@ -44,7 +44,16 @@ const empLogin=async(req, res )=>{
      res.send({token: token, msg:"You are succesfully Login"});
 }
 
+const empAuth=async(req, res)=>{
+   const token= req.header("auth-token");
+   const decode = jwt.verify(token, "reshu111");
+ const  user  = await EmpModel.findById(decode.id);
+     console.log(user);
+     res.status(200).send(user);
+}
+
 module.exports = {
     empSave,
-    empLogin
+    empLogin,
+    empAuth
 }
