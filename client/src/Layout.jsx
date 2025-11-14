@@ -3,8 +3,8 @@ const Layout=()=>{
     return(
         <>
           <Link to="home">Home</Link> |
-           <Link to="registration">Registration</Link> |
-            <Link to="login">Login</Link> |
+           <Link to="registration">Insert</Link> |
+            <Link to="login">Display</Link> |
            
               <hr size="4" color="red"/>
               <Outlet/>

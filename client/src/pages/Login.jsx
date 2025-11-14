@@ -1,33 +1,50 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+
 const Login=()=>{
-    const [input, setInput] = useState({});
-    const navigate = useNavigate();
-   const handleInput=(e)=>{
-      let name=e.target.name;
-      let value=e.target.value;
-      setInput(values=>({...values, [name]:value}));
-   }
-   const handleSubmit=async()=>{
-      let api="http://localhost:8000/employees/login";
-      const response = await axios.post(api, input);
+  const [mydata, setMydata] = useState([]);
+  
+  const loadData= async()=>{
+       let api="http://localhost:8000/employees/display";
+      const response = await axios.get(api);
+      console.log(response.data);
+      setMydata(response.data);
+  }
 
-      console.log(response);
-      localStorage.setItem("token", response.data.token);
-      alert(response.data.msg);
-      navigate("/home")
 
-   }
+  useEffect(()=>{
+    loadData();
+  }, []);
+
+const ans=mydata.map((key)=>{
+  return(
+    <>
+     <tr>
+      <td> {key.fname}</td>
+       <td> {key.lname}</td>
+        <td> {key.userid.username}</td>
+         <td> {key.userid.email}</td>
+     </tr>
+    </>
+  )
+})
+
+
     return(
         <>
-          <h1> Employee Login </h1>
-            Enter Email : <input type="text" name="email" onChange={handleInput} />
-          <br/>
-            Enter Password : <input type="text" name="password" onChange={handleInput} />
-          <br/>
-          
-          <button onClick={handleSubmit}>Save!!!</button>
+          <h1> User Display </h1>
+          <table>
+            <tr>
+              <td> Frist name</td>
+              
+              <td> Last name</td>
+                <td> User name</td>
+                  <td> Email</td>
+
+            </tr>
+            {ans}
+          </table>
+         
         </>
      )
 }

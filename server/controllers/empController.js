@@ -1,59 +1,28 @@
-const EmpModel = require("../models/empModel");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-
-const empSave = async (req, res) => {
-    const { username, email, password }= req.body
-    const passwordHash =  await bcrypt.hash(password, 10);
-    
-    const user= await EmpModel.create({
-          username:username,
-    email:email,
-    password:passwordHash
+const UserModel = require("../models/userModel");
+const ProfileModel = require("../models/profileModel");
+const userSave = async (req, res) => {
+    const { username, email, fname, lname } = req.body;
+    const user = await UserModel.create({
+        username: username,
+        email: email
     })
-
-  
-
-    res.send("You are Succesfully Registered!!")
-
-
+    const profile = await ProfileModel.create({
+        fname: fname,
+        lname: lname,
+        userid:user._id
+    })
+   
+    res.send("Data save!!!")
 }
 
-const empLogin=async(req, res )=>{
-    const { email, password} = req.body;
-    
-     const user = await EmpModel.findOne({email:email});
-     if (!user)
-     {
-        res.status(401).send({msg:"Invalid Email"});
-     }
 
-     const passwordMatch =  await bcrypt.compare(password, user.password);
-     console.log(passwordMatch);
-     if (!passwordMatch)
-     {
-         res.status(401).send({msg:"Invalid Password"});
-     }
-
-     
-    const token = jwt.sign({ id:user._id }, "reshu111", {
-    expiresIn: 3 * 24 * 60 * 60,
-  });
-
-    console.log(token);
-     res.send({token: token, msg:"You are succesfully Login"});
+const userDisplay=async(req, res)=>{
+     const profile = await ProfileModel.find().populate("userid")
+     res.send(profile);
 }
 
-const empAuth=async(req, res)=>{
-   const token= req.header("auth-token");
-   const decode = jwt.verify(token, "reshu111");
- const  user  = await EmpModel.findById(decode.id);
-     console.log(user);
-     res.status(200).send(user);
-}
 
 module.exports = {
-    empSave,
-    empLogin,
-    empAuth
+    userSave,
+    userDisplay
 }
