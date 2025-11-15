@@ -15,14 +15,14 @@ const Registration = () => {
   }
   return (
     <>
-      <h1> Insert Data</h1>
-      Enter Username : <input type="text" name="username" onChange={handleInput} />
+      <h1> Insert Book Data</h1>
+      Enter Author Name : <input type="text" name="name" onChange={handleInput} />
       <br />
-      Enter Email : <input type="text" name="email" onChange={handleInput} />
+      Enter Author Address : <input type="text" name="address" onChange={handleInput} />
       <br />
-      Enter First Name : <input type="text" name="fname" onChange={handleInput} />
+      Enter Book Title : <input type="text" name="booktitle" onChange={handleInput} />
       <br />
-      Enter First Lastname : <input type="text" name="lname" onChange={handleInput} />
+       Enter Book Price : <input type="text" name="price" onChange={handleInput} />
       <br />
 
       <button onClick={handleSubmit}>Save!!!</button>

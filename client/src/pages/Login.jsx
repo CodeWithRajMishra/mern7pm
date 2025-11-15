@@ -1,8 +1,20 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 
 const Login=()=>{
   const [mydata, setMydata] = useState([]);
+   const [show, setShow] = useState(false);
+   const [aid, setAid] = useState("");
+   const [booktitle, setBookTitle] = useState("");
+   const [price, setPrice] = useState("");
+
+  const handleClose = () => setShow(false);
+  const handleShow = (id) =>{
+setShow(true);
+setAid(id)
+  } 
   
   const loadData= async()=>{
        let api="http://localhost:8000/employees/display";
@@ -11,6 +23,11 @@ const Login=()=>{
       setMydata(response.data);
   }
 
+  const saveBook=async()=>{
+      let api="http://localhost:8000/employees/savebook";
+      const response= await axios.post(api,{aid, booktitle, price} );
+      console.log(response.data);
+  }
 
   useEffect(()=>{
     loadData();
@@ -20,10 +37,22 @@ const ans=mydata.map((key)=>{
   return(
     <>
      <tr>
-      <td> {key.fname}</td>
-       <td> {key.lname}</td>
-        <td> {key.userid.username}</td>
-         <td> {key.userid.email}</td>
+      <td> {key.name}</td>
+       <td> {key.address}</td>
+        <td> 
+           {
+            key.booksid.map((key1)=>{
+              return(
+                <>
+                    <p> Title :  {key1.booktitle} Price :{key1.price}</p>
+                </>
+              )
+            })
+           }
+          </td>
+          <td>
+            <button onClick={()=>{handleShow(key._id)}}>Add more Book</button>
+          </td>
      </tr>
     </>
   )
@@ -35,15 +64,29 @@ const ans=mydata.map((key)=>{
           <h1> User Display </h1>
           <table>
             <tr>
-              <td> Frist name</td>
+              <td>  name</td>
               
-              <td> Last name</td>
-                <td> User name</td>
-                  <td> Email</td>
-
+              <td> Address</td>
+                <td> Books Detail</td>
+                
+               <td></td>
             </tr>
             {ans}
           </table>
+           <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Add more Book</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+           Enter Book Title : <input type="text" value={booktitle} onChange={(e)=>{setBookTitle(e.target.value)}} />
+           <br />
+           Enter Price : <input type="text" value={price} onChange={(e)=>{setPrice(e.target.value)}} />
+           <br />
+           <button onClick={saveBook}>Add!</button> 
+
+        </Modal.Body>
+       
+      </Modal>
          
         </>
      )
