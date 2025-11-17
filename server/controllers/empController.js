@@ -9,7 +9,8 @@ const userSave = async (req, res) => {
     })
     const book = await BookModel.create({
         booktitle: booktitle,
-        price: price
+        price: price,
+        aid: author._id
     })
     await AuthorModel.findByIdAndUpdate(author._id, { $push: { "booksid": book._id } });
     res.send("Data save!!!")
@@ -23,7 +24,8 @@ const bookSave = async (req, res) => {
     const { aid, booktitle, price } = req.body;
     const book = await BookModel.create({
         booktitle: booktitle,
-        price: price
+        price: price,
+        aid:aid
     })
 
     await AuthorModel.findByIdAndUpdate(aid, {$push:{"booksid":book._id}});
@@ -31,11 +33,16 @@ const bookSave = async (req, res) => {
 }
 
 
+const Display2=async(req, res) =>{
+    const book = await BookModel.find().populate("aid");
+    res.send(book);
+}
 
 
 
 module.exports = {
     userSave,
     userDisplay,
-    bookSave
+    bookSave,
+    Display2
 }
