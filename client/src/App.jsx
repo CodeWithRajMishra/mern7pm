@@ -1,29 +1,55 @@
-import {BrowserRouter , Routes, Route} from "react-router-dom";
-import Layout from "./Layout";
-import Home from "./pages/home";
-import Registration from "./pages/Registration";
-import Login from "./pages/Login";
-import DashBoard from "./pages/DashBoard";
-import Display2 from "./pages/Display2";
+import { useState } from "react";
+import { addTask, delTask } from "./todoSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { MdDeleteSweep } from "react-icons/md";
+import { FaCircleCheck } from "react-icons/fa6";
+import { ImCross } from "react-icons/im";
 const App=()=>{
+  const [val, setVal]= useState("");
+  const dispatch = useDispatch();
+  const myTask= useSelector(state=>state.todo.task);
+  console.log(myTask);
+  const ans= myTask.map((key, index)=>{
+     return(
+      <>
+         <tr>
+          <td>{index+1}</td>
+          <td>{key.work}</td>
+          <td>
+            <MdDeleteSweep onClick={()=>{dispatch(delTask({id:key.id}))}} />
+          </td>
+          <td>
+            <FaCircleCheck />
+          </td>
+          <td>
+            <ImCross />
+          </td>
+          <td>
+            <button>Edit</button>
+          </td>
+         </tr>
+      </>
+     )
+  })
   return(
     <>
-    <BrowserRouter>
-         <Routes>
-          <Route path="/" element={<Layout/>}>
-          <Route index element={<Home/>} />
-          <Route path="home" element={<Home/>} /> 
-          <Route path="registration" element={<Registration/>}/>   
-          <Route path="login" element={<Login/>}/>
-          <Route path="display2" element={<Display2/>}/>
-          </Route>
-         </Routes>
-         <Routes>
-          <Route path="dashboard" element={<DashBoard/>}>
-          
-          </Route>
-         </Routes>
-       </BrowserRouter>
+      <h1> To Do App </h1>
+      <hr />
+      Enter Task : <input type="text" value={val} onChange={(e)=>{setVal(e.target.value)}} />
+      <button onClick={()=>{dispatch(addTask({id: Date.now(), work:val}))}}>Add</button>
+      <hr />
+      <table>
+        <tr>
+          <th>SNo</th>
+          <th> You Assigned Task</th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+        </tr>
+        {ans}
+      </table>
+
     </>
   )
 }
